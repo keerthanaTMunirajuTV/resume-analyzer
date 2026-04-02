@@ -33,35 +33,35 @@ function App() {
 
       {result && (
         <div style={{ marginTop: "20px" }}>
-          <h3>Score: {result.score}</h3>
+          <h3>Score: {result.score ?? "N/A"}</h3>
 
           <h4>Profile Summary</h4>
-          <p>{result.profile_summary}</p>
+          <p>{result.profile_summary ?? "No summary available"}</p>
 
           <h4>Strengths</h4>
           <ul>
-            {result.strengths.map((item, i) => (
+            {(result?.strengths || []).map((item, i) => (
               <li key={i}>{item}</li>
             ))}
           </ul>
 
           <h4>Areas for Improvement</h4>
           <ul>
-            {result.areas_for_improvement.map((item, i) => (
+            {(result?.areas_for_improvement || []).map((item, i) => (
               <li key={i}>{item}</li>
             ))}
           </ul>
 
           <h4>Missing Skills / Sections</h4>
           <ul>
-            {result.missing_skills_or_sections.map((item, i) => (
+            {(result?.missing_skills_or_sections || []).map((item, i) => (
               <li key={i}>{item}</li>
             ))}
           </ul>
 
           <h4>Suggestions</h4>
           <ul>
-            {result.suggestions.map((item, i) => (
+            {(result?.suggestions || []).map((item, i) => (
               <li key={i}>{item}</li>
             ))}
           </ul>
