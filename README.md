@@ -22,12 +22,6 @@ cd backend
 npm install
 ```
 
-Create `.env` file:
-
-```bash
-GEMINI_API_KEY=AIzaSyAkI1cXP44Q_gA5kftM11ICwDQkG2dy_wc
-```
-
 Run backend:
 
 ```bash
@@ -86,45 +80,22 @@ AI is used for:
 
 ## 🧠 Prompts Used
 
-Example prompt:
+During development, different prompts were used and refined to improve output quality.
 
-```text
-Analyze this resume and return ONLY valid JSON.
-
-Current Date: ${currentDate}
-
-Resume:
-${resumeText}
-
-Job Description:
-${jobDesc}
-
-Rules:
-- Score must be out of 100
-- Keep answers short and precise
-- Avoid unnecessary explanation
-
-Format:
-{
-  "score": number,
-  "profile_summary": "",
-  "keywords": [],
-  "match_score": number,
-  "matched_skills": [],
-  "missing_skills": [],
-  "section_scores": {
-    "technical_skills": number,
-    "projects": number,
-    "experience": number,
-    "education": number
-  },
-  "strengths": [],
-  "areas_for_improvement": [],
-  "missing_skills_or_sections": [],
-  "suggestions": []
-}
-```
-
+* Initial Prompt
+    -Simple instruction to analyze resume
+    Result: AI gave long, unstructured responses
+* Improved Prompt
+    Added strict JSON format
+    Limited number of points
+    Enforced score range (0–100)
+* Final Prompt Strategy
+    Provided clear rules:
+    Return ONLY JSON
+    Keep output short and precise
+    Limit points (3–5 per section)
+    Include current date to avoid future date issues
+    This helped generate consistent and structured output
 ---
 
 ## ⚠️ Limitations
@@ -171,11 +142,21 @@ Format:
 
 ## 🚀 Future Enhancements
 
-* Improve prompt engineering for better accuracy
-* Add stronger validation for AI responses
-* Enhance UI/UX for better user experience
-* Implement authentication and user history tracking
-* Optimize performance and response time
+* AI sometimes returned extra text instead of clean JSON
+* Inconsistent scores for same resume (e.g., 78 → 80)
+* Incorrect interpretation of dates (e.g., treating 2025 as future)
+* Parsing AI response into JSON caused errors occasionally
+* Large resume text affected response consistency
+
+---
+
+## 🛠️ How Challenges Were Solved
+
+* Used strict prompt rules to enforce JSON format
+* Extracted JSON using substring method ({...})
+* Added default fallback values to avoid crashes
+* Passed current date dynamically to fix date-related issues
+* Limited output size to improve consistency
 
 ---
 
@@ -198,12 +179,6 @@ Format:
 * Backend: Node.js, Express.js
 * AI: Gemini API
 * Libraries: Multer, pdf-parse, axios, html2canvas, jsPDF
-
----
-
-## 📷 Screenshots
-
-(Add your project screenshots here)
 
 ---
 
