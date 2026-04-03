@@ -78,6 +78,14 @@ AI is used for:
 
 ---
 
+## ⚠️ API Limitations
+* Some Gemini models were not accessible or supported with the current API key, leading to 404 errors during integration.
+* Free-tier usage has limited access to certain advanced models and features.
+* API rate limits and response delays affected continuous testing.
+* Occasional instability in responses, especially with large resume inputs.
+* AI does not always return strictly formatted JSON, requiring additional handling in backend.
+* Output may vary slightly for the same input due to probabilistic nature of AI.
+
 ## 🧠 Prompts Used
 
 During development, different prompts were used and refined to improve output quality.
@@ -131,12 +139,20 @@ During development, different prompts were used and refined to improve output qu
 
 ---
 
-## 🔍 Challenges Faced
+## ⚠️ Challenges Faced While Using AI
 
-* Inconsistent AI outputs for the same input
-* Occasional incorrect interpretations (e.g., date handling issues)
-* Difficulty in enforcing strict JSON responses from AI
-* Managing large and unstructured resume data
+* Faced major difficulty with selecting the correct Gemini model, as several models (e.g., gemini-1.5-flash, gemini-1.0-pro) returned 404 errors or were not supported.
+* API key issues such as expired or invalid keys caused repeated failures during integration.
+* AI responses were sometimes unstructured or included extra text, making JSON parsing difficult.
+* Inconsistent outputs for the same resume required multiple prompt adjustments.
+
+## 🛠️ How These Issues Were Resolved
+
+* Used the List Models API to identify available and supported models, and switched to a working model (gemini-2.5-flash).
+* Regenerated and correctly configured the API key in the environment variables.
+* Updated backend to use the official SDK instead of raw REST calls for better reliability.
+* Refined prompts to enforce strict JSON output and limited response size.
+* Implemented safe JSON extraction and fallback handling in backend to avoid crashes.
 
 ---
 
@@ -147,16 +163,6 @@ During development, different prompts were used and refined to improve output qu
 * Incorrect interpretation of dates (e.g., treating 2025 as future)
 * Parsing AI response into JSON caused errors occasionally
 * Large resume text affected response consistency
-
----
-
-## 🛠️ How Challenges Were Solved
-
-* Used strict prompt rules to enforce JSON format
-* Extracted JSON using substring method ({...})
-* Added default fallback values to avoid crashes
-* Passed current date dynamically to fix date-related issues
-* Limited output size to improve consistency
 
 ---
 
