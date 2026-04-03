@@ -21,7 +21,7 @@ function App() {
     formData.append("jobDesc", jobDesc);
 
     try {
-      const res = await axios.post("http://localhost:5000/analyze", formData);
+      const res = await axios.post(`${process.env.REACT_APP_API_URL}/analyze`, formData);
       setResult(res.data);
     } catch (error) {
       console.error(error);
