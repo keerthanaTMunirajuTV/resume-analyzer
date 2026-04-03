@@ -40,28 +40,28 @@ function App() {
 
           <h4>Strengths</h4>
           <ul>
-            {(result?.strengths || []).map((item, i) => (
+            {(result?.strengths || []).slice(0, 5).map((item, i) => (
               <li key={i}>{item}</li>
             ))}
           </ul>
 
           <h4>Areas for Improvement</h4>
           <ul>
-            {(result?.areas_for_improvement || []).map((item, i) => (
+            {(result?.areas_for_improvement || []).slice(0, 4).map((item, i) => (
               <li key={i}>{item}</li>
             ))}
           </ul>
 
           <h4>Missing Skills / Sections</h4>
           <ul>
-            {(result?.missing_skills_or_sections || []).map((item, i) => (
+            {(result?.missing_skills_or_sections || []).slice(0, 3).map((item, i) => (
               <li key={i}>{item}</li>
             ))}
           </ul>
 
           <h4>Suggestions</h4>
           <ul>
-            {(result?.suggestions || []).map((item, i) => (
+            {(result?.suggestions || []).slice(0, 4).map((item, i) => (
               <li key={i}>{item}</li>
             ))}
           </ul>

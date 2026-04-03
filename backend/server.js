@@ -26,19 +26,44 @@ app.post("/analyze", upload.single("resume"), async (req, res) => {
 
     console.log("Extracted Resume Text:", resumeText.substring(0, 200));
 
-    // ✅ IMPORTANT: correct model name for AI Studio
+    // ✅ ADD CURRENT DATE HERE
+    const currentDate = new Date().toISOString().split("T")[0];
+
+    // Gemini model
     const model = genAI.getGenerativeModel({
-      model: "gemini-2.5-flash"
+      model: "gemini-2.5-flash",
+      generationConfig: {
+      temperature: 0.2, 
+      }
     });
 
+    //PROMPT
     const prompt = `
-Analyze this resume and return ONLY valid JSON:
+Analyze this resume and return ONLY valid JSON.
+
+IMPORTANT RULES:
+- Today's date is ${currentDate}
+- Score MUST be between 0 to 100 (integer only)
+- Keep response SHORT and CONCISE
+- Use simple and clear language
+- Limit each section:
+
+  • Profile Summary → max 2 lines
+  • Strengths → max 5 points
+  • Areas for Improvement → max 4 points
+  • Missing Skills / Sections → max 3 points
+  • Suggestions → max 4 points
+
+- Avoid long sentences
+- Avoid repetition
+- Focus only on important points
+
 
 ${resumeText}
 
 Format:
 {
-  "score": number,
+  "score": number(0-100),
   "profile_summary": "",
   "strengths": [],
   "areas_for_improvement": [],
@@ -66,18 +91,28 @@ Format:
         console.log("JSON Parse Error:", err);
       }
     }
+let score = parsed?.score || 0;
+
+// Convert if AI gives score out of 10
+if (score <= 10) {
+  score = score * 10;
+}
+
+// Round it
+score = Math.round(score);
 
     res.json({
-      score: parsed?.score || 0,
-      profile_summary: parsed?.profile_summary || "No summary available",
-      strengths: parsed?.strengths || [],
-      areas_for_improvement: parsed?.areas_for_improvement || [],
-      missing_skills_or_sections: parsed?.missing_skills_or_sections || [],
-      suggestions: parsed?.suggestions || [],
-    });
+  score: score,
+  profile_summary: parsed?.profile_summary || "No summary available",
+  strengths: parsed?.strengths || [],
+  areas_for_improvement: parsed?.areas_for_improvement || [],
+  missing_skills_or_sections: parsed?.missing_skills_or_sections || [],
+  suggestions: parsed?.suggestions || [],
+});
 
   } catch (error) {
     console.error("Error:", error);
+
     res.status(500).json({
       score: 0,
       profile_summary: "No summary available",
@@ -90,6 +125,7 @@ Format:
   }
 });
 
+// Optional: model check route
 app.get("/models", async (req, res) => {
   try {
     const response = await fetch(
