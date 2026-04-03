@@ -1,9 +1,12 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
+import "./App.css";
+
 
 function App() {
   const [file, setFile] = useState(null);
   const [result, setResult] = useState(null);
+  const [displayScore, setDisplayScore] = useState(0);
 
   const handleUpload = async () => {
     if (!file) {
@@ -23,8 +26,24 @@ function App() {
     }
   };
 
+  useEffect(() => {
+    if (result?.score) {
+      let start = 0;
+      const end = result.score;
+      setDisplayScore(0);
+      const interval = setInterval(() => {
+        start += 1;
+        setDisplayScore(start);
+
+        if (start >= end) clearInterval(interval);
+      }, 20);
+      return () => clearInterval(interval);
+    }
+  }, [result]);
+
+
   return (
-    <div style={{ padding: "30px", fontFamily: "Arial" }}>
+    <div className="container">
       <h2>AI Resume Analyzer</h2>
 
       <input type="file" onChange={(e) => setFile(e.target.files[0])} />
@@ -32,41 +51,57 @@ function App() {
       <button onClick={handleUpload}>Analyze Resume</button>
 
       {result && (
-        <div style={{ marginTop: "20px" }}>
-          <h3>Score: {result.score ?? "N/A"}</h3>
+  <div className="section">
+    <div className="score-container">
+  <div 
+    className="score-circle"
+    style={{
+      color:
+        displayScore < 40
+          ? "red"
+          : displayScore < 70
+          ? "orange"
+          : "green",
+    }}
+  >
+    {displayScore}
+    <span>/100</span>
+  </div>
+  <p>Resume Score</p>
+</div>
 
-          <h4>Profile Summary</h4>
-          <p>{result.profile_summary ?? "No summary available"}</p>
+    <h4>Profile Summary</h4>
+    <p className="summary">{result.profile_summary}</p>
 
-          <h4>Strengths</h4>
-          <ul>
-            {(result?.strengths || []).slice(0, 5).map((item, i) => (
-              <li key={i}>{item}</li>
-            ))}
-          </ul>
+    <h4>Strengths</h4>
+    <ul>
+      {(result?.strengths || []).slice(0, 5).map((item, i) => (
+        <li key={i}>{item}</li>
+      ))}
+    </ul>
 
-          <h4>Areas for Improvement</h4>
-          <ul>
-            {(result?.areas_for_improvement || []).slice(0, 4).map((item, i) => (
-              <li key={i}>{item}</li>
-            ))}
-          </ul>
+    <h4>Areas for Improvement</h4>
+    <ul>
+      {(result?.areas_for_improvement || []).slice(0, 4).map((item, i) => (
+        <li key={i}>{item}</li>
+      ))}
+    </ul>
 
-          <h4>Missing Skills / Sections</h4>
-          <ul>
-            {(result?.missing_skills_or_sections || []).slice(0, 3).map((item, i) => (
-              <li key={i}>{item}</li>
-            ))}
-          </ul>
+    <h4>Missing Skills / Sections</h4>
+    <ul>
+      {(result?.missing_skills_or_sections || []).slice(0, 3).map((item, i) => (
+        <li key={i}>{item}</li>
+      ))}
+    </ul>
 
-          <h4>Suggestions</h4>
-          <ul>
-            {(result?.suggestions || []).slice(0, 4).map((item, i) => (
-              <li key={i}>{item}</li>
-            ))}
-          </ul>
-        </div>
-      )}
+    <h4>Suggestions</h4>
+    <ul>
+      {(result?.suggestions || []).slice(0, 4).map((item, i) => (
+        <li key={i}>{item}</li>
+      ))}
+    </ul>
+  </div>
+)}
     </div>
   );
 }
