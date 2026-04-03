@@ -46,7 +46,10 @@ function App() {
     <div className="container">
       <h2>AI Resume Analyzer</h2>
 
-      <input type="file" onChange={(e) => setFile(e.target.files[0])} />
+      <input type="file" 
+  accept=".pdf,.doc,.docx,.txt"
+  onChange={(e) => setFile(e.target.files[0])} 
+   />
       <br /><br />
       <button onClick={handleUpload}>Analyze Resume</button>
 

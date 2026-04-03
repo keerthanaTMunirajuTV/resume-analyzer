@@ -20,9 +20,29 @@ app.post("/analyze", upload.single("resume"), async (req, res) => {
       return res.status(400).json({ error: "No file uploaded" });
     }
 
-    // Extract PDF text
-    const pdfData = await pdfParse(req.file.buffer);
-    const resumeText = pdfData.text || "";
+    let resumeText = "";
+
+const fileType = req.file.mimetype;
+
+if (fileType === "application/pdf") {
+  const pdfData = await pdfParse(req.file.buffer);
+  resumeText = pdfData.text;
+} 
+else if (
+  fileType === "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+) {
+  const mammoth = require("mammoth");
+  const result = await mammoth.extractRawText({ buffer: req.file.buffer });
+  resumeText = result.value;
+} 
+else if (fileType === "text/plain") {
+  resumeText = req.file.buffer.toString("utf-8");
+} 
+else {
+  return res.status(400).json({ error: "Unsupported file type" });
+}
+
+console.log("Extracted Resume Text:", resumeText.substring(0, 200));
 
     console.log("Extracted Resume Text:", resumeText.substring(0, 200));
 
