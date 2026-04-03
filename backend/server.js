@@ -62,6 +62,12 @@ console.log("Extracted Resume Text:", resumeText.substring(0, 200));
 const prompt = `
 Today’s date is ${currentDate}.
 
+Keep output SHORT and precise
+- Do NOT give long explanations
+- Each list should contain MAX 3–5 points only
+- Score must be between 0–100 (integer only)
+- Avoid unnecessary text
+- Follow EXACT format below
 Analyze this resume and return ONLY valid JSON.
 Keep response SHORT and concise.
 Analyze this resume and compare with job description.
@@ -76,10 +82,10 @@ Return ONLY valid JSON (short and concise):
 {
   "score": number (0-100),
   "profile_summary": "max 2 lines",
-  "strengths": ["max 5"],
-  "areas_for_improvement": ["max 5"],
-  "missing_skills_or_sections": ["max 5"],
-  "suggestions": ["max 5"],
+  "strengths": ["max 3"],
+  "areas_for_improvement": ["max 3"],
+  "missing_skills_or_sections": ["max 3"],
+  "suggestions": ["max 3"],
   "keywords": ["8-10 keywords"],
 
   "match_score": number (0-100),

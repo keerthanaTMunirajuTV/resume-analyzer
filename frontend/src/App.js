@@ -97,7 +97,7 @@ const downloadPDF = async () => {
 
           <br /><br />
 
-          <button onClick={handleUpload}>Analyze Resume</button>
+          <button onClick={handleUpload}>Analyze your Resume</button>
         </div>
         </div>
       ) : (
