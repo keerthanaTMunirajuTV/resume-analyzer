@@ -84,7 +84,13 @@ Return ONLY valid JSON (short and concise):
 
   "match_score": number (0-100),
   "matched_skills": ["max 5"],
-  "missing_skills": ["max 5"]
+  "missing_skills": ["max 5"],
+  "section_scores": {
+    "technical_skills": number,
+    "projects": number,
+    "experience": number,
+    "education": number
+  }
 }
 `;
 
@@ -128,7 +134,14 @@ score = Math.round(score);
 
    match_score: parsed?.match_score || 0,
   matched_skills: parsed?.matched_skills || [],
-  missing_skills: parsed?.missing_skills || []
+  missing_skills: parsed?.missing_skills || [],
+
+  section_scores: parsed?.section_scores || {
+    technical_skills: 0,
+    projects: 0,
+    experience: 0,
+    education: 0
+  }
 });
 
   } catch (error) {
