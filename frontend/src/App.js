@@ -4,6 +4,7 @@ import "./App.css";
 
 
 function App() {
+  const [jobDesc, setJobDesc] = useState("");
   const [file, setFile] = useState(null);
   const [result, setResult] = useState(null);
   const [displayScore, setDisplayScore] = useState(0);
@@ -16,6 +17,7 @@ function App() {
 
     const formData = new FormData();
     formData.append("resume", file);
+    formData.append("jobDesc", jobDesc);
 
     try {
       const res = await axios.post("http://localhost:5000/analyze", formData);
@@ -51,6 +53,18 @@ function App() {
   onChange={(e) => setFile(e.target.files[0])} 
    />
       <br /><br />
+      <textarea
+  placeholder="Paste Job Description here..."
+  value={jobDesc}
+  onChange={(e) => setJobDesc(e.target.value)}
+  style={{
+    width: "100%",
+    height: "100px",
+    marginBottom: "10px",
+    padding: "10px"
+  }}
+/>
+<br /><br />
       <button onClick={handleUpload}>Analyze Resume</button>
 
       {result && (
@@ -76,6 +90,29 @@ function App() {
     <h4>Profile Summary</h4>
     <p className="summary">{result.profile_summary}</p>
 
+    <h4>Keywords</h4>
+<div>
+  {(result?.keywords || []).map((item, i) => (
+    <span key={i} className="tag">{item}</span>
+  ))}
+</div>
+
+<h4>Job Match Score: {result?.match_score}%</h4>
+
+<h4>Matched Skills</h4>
+<ul>
+  {(result?.matched_skills || []).map((item, i) => (
+    <li key={i}>{item}</li>
+  ))}
+</ul>
+
+<h4>Missing Skills</h4>
+<ul>
+  {(result?.missing_skills || []).map((item, i) => (
+    <li key={i}>{item}</li>
+  ))}
+</ul>
+    
     <h4>Strengths</h4>
     <ul>
       {(result?.strengths || []).slice(0, 5).map((item, i) => (
@@ -103,6 +140,7 @@ function App() {
         <li key={i}>{item}</li>
       ))}
     </ul>
+    
   </div>
 )}
     </div>

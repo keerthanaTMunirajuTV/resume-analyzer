@@ -58,37 +58,33 @@ console.log("Extracted Resume Text:", resumeText.substring(0, 200));
     });
 
     //PROMPT
-    const prompt = `
+    
+const prompt = `
+Today’s date is ${currentDate}.
+
 Analyze this resume and return ONLY valid JSON.
-
-IMPORTANT RULES:
-- Today's date is ${currentDate}
-- Score MUST be between 0 to 100 (integer only)
-- Keep response SHORT and CONCISE
-- Use simple and clear language
-- Limit each section:
-
-  • Profile Summary → max 2 lines
-  • Strengths → max 5 points
-  • Areas for Improvement → max 4 points
-  • Missing Skills / Sections → max 3 points
-  • Suggestions → max 4 points
-
-- Avoid long sentences
-- Avoid repetition
-- Focus only on important points
-
-
+Keep response SHORT and concise.
+Analyze this resume and compare with job description.
+Resume:
 ${resumeText}
 
-Format:
+Job Description:
+${req.body.jobDesc || "Not provided"}
+
+Return ONLY valid JSON (short and concise):
+
 {
-  "score": number(0-100),
-  "profile_summary": "",
-  "strengths": [],
-  "areas_for_improvement": [],
-  "missing_skills_or_sections": [],
-  "suggestions": []
+  "score": number (0-100),
+  "profile_summary": "max 2 lines",
+  "strengths": ["max 5"],
+  "areas_for_improvement": ["max 5"],
+  "missing_skills_or_sections": ["max 5"],
+  "suggestions": ["max 5"],
+  "keywords": ["8-10 keywords"],
+
+  "match_score": number (0-100),
+  "matched_skills": ["max 5"],
+  "missing_skills": ["max 5"]
 }
 `;
 
@@ -128,6 +124,11 @@ score = Math.round(score);
   areas_for_improvement: parsed?.areas_for_improvement || [],
   missing_skills_or_sections: parsed?.missing_skills_or_sections || [],
   suggestions: parsed?.suggestions || [],
+  keywords: parsed?.keywords || [],
+
+   match_score: parsed?.match_score || 0,
+  matched_skills: parsed?.matched_skills || [],
+  missing_skills: parsed?.missing_skills || []
 });
 
   } catch (error) {

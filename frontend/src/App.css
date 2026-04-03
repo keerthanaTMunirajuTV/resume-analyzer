@@ -70,3 +70,13 @@ li {
   padding: 10px;
   border-radius: 6px;
 }
+
+.tag {
+  background: #e3f2fd;
+  color: #1565c0;
+  padding: 6px 12px;
+  border-radius: 20px;
+  margin: 5px;
+  display: inline-block;
+  font-size: 12px;
+}
