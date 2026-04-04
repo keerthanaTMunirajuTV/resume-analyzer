@@ -74,7 +74,7 @@ Analyze this resume and return ONLY valid JSON.
 Keep response SHORT and concise.
 Analyze this resume and compare with job description.
 Resume:
-${resumeText}
+${resumeText.substring(0, 3000)}
 
 Job Description:
 ${req.body.jobDesc || "Not provided"}
