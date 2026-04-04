@@ -9,12 +9,16 @@ function App() {
   const [file, setFile] = useState(null);
   const [result, setResult] = useState(null);
   const [displayScore, setDisplayScore] = useState(0);
+  const [loading, setLoading] = useState(false);
 
   const handleUpload = async () => {
     if (!file) {
       alert("Please upload a resume");
       return;
     }
+
+    setLoading(true);  // Start loader
+  setResult(null);   // Clear previous result
 
     const formData = new FormData();
     formData.append("resume", file);
@@ -27,6 +31,9 @@ function App() {
       console.error(error);
       alert("Error analyzing resume");
     }
+    finally {
+    setLoading(false); // Stop loader
+  }
   };
 
 const downloadPDF = async () => {
@@ -97,7 +104,11 @@ const downloadPDF = async () => {
 
           <br /><br />
 
-          <button onClick={handleUpload}>Analyze your Resume</button>
+          <button onClick={handleUpload} disabled={loading}>
+  {loading ? "Analyzing..." : "Analyze your Resume"}
+</button>
+{/* Optional loader spinner */}
+    {loading && <div className="loader">⏳ Analyzing your resume, please wait...</div>}
         </div>
         </div>
       ) : (
